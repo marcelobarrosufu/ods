@@ -16,7 +16,7 @@ typedef struct port_rtc_ctrl_s
 
 port_rtc_ctrl_t port_rtc_ctrl = { 0 };
 
-static void port_get(hal_rtc_date_time_t *dt)
+static void port_rtc_get(hal_rtc_date_time_t *dt)
 {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -29,31 +29,17 @@ static void port_get(hal_rtc_date_time_t *dt)
     dt->second = tm.tm_sec;
 }
 
-static void port_set(hal_rtc_date_time_t *dt)
+static void port_rtc_set(hal_rtc_date_time_t *dt)
 {
     // N.A.
 }
 
-static void port_init(void)
+static void port_rtc_init(void)
 {
 }
-
-static void port_nvram_write(uint32_t index, uint32_t val)
-{
-}
-
-static uint32_t port_nvram_read(uint32_t index)
-{
-    uint32_t val = 0;
-
-    return val;
-}
-
 hal_rtc_driver_t HAL_RTC_DRIVER =
 {
-    .get = port_get,
-    .set = port_set,
-	.init = port_init,
-    .nvram_read = port_nvram_read,
-    .nvram_write = port_nvram_write,
+    .get = port_rtc_get,
+    .set = port_rtc_set,
+	.init = port_rtc_init,
 };

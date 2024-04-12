@@ -52,9 +52,6 @@ typedef struct hal_rtc_driver_s
 {
 	void (*set)(hal_rtc_date_time_t *dt);
 	void (*get)(hal_rtc_date_time_t *dt);
-    void (*nvram_write)(uint32_t index, uint32_t val);
-    uint32_t (*nvram_read)(uint32_t index);
-    void (*nvram_format)(void);
 	void (*init)(void);
 } hal_rtc_driver_t;
 

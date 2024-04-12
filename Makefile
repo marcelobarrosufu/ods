@@ -29,48 +29,46 @@ endif
 
 CC = gcc
 BUILD_DIR = build
-TARGET = $(BUILD_DIR)/ods.exe
-MAKEFLAGS += --jobs=8
+#MAKEFLAGS += --jobs=8
 
 #-Wextra -Werror
 CFLAGS = -g -Wall -std=c11 -I. -I./inc -Iutl/inc -Ihal/inc -Iutl/printf -Iutl/ods $(THIRD_INCS)
 LDFLAGS = $(LDFLAGS_EXTRA) -lm  $(THIRD_LIBS)
 
-APP_SRCS = src/main.c
 HAL_SRCS = hal/src/hal.c hal/src/hal_rtc.c hal/src/hal_tmr.c hal/src/hal_cpu.c 
 PORT_SRCS = port/$(BOARD)/rtc.c port/$(BOARD)/stdout.c port/$(BOARD)/timer.c port/$(BOARD)/cpu.c
 UTL_SRCS = utl/src/utl_dbg.c utl/printf/utl_printf.c  utl/ods/ods.c
+TEST_SRCS = tests/main.c tests/simple.c
 THIRD_SRCS = 
 
-SRCS = $(APP_SRCS) $(HAL_SRCS) $(UTL_SRCS) $(PORT_SRCS) $(THIRD_SRCS)
+SRCS = $(HAL_SRCS) $(UTL_SRCS) $(PORT_SRCS) $(THIRD_SRCS)
 
 OBJS = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
-#vpath %.c $(sort $(dir $(SRCS)))
-PATHS = $(dir $(OBJS))
+TEST_OBJS = $(addprefix $(BUILD_DIR)/,$(TEST_SRCS:.c=.o))
 
+PATHS = $(dir $(OBJS) $(TEST_OBJS))
+
+TARGETS = main simple
 
 ifeq ($(OSNAME),Windows_NT)
-  OBJS2DEL = $(subst /,\,$(OBJS))
   PATHS:= $(subst /,\,$(PATHS))
-else
-  OBJS2DEL = $(OBJS)
 endif
 
 .PHONY: all clean
 
-all: $(BUILD_DIR) $(TARGET)
+all: $(BUILD_DIR) $(TARGETS)
+
+main: $(BUILD_DIR)/tests/main.o $(OBJS)
+	$(CC) $^ -o $(BUILD_DIR)/$@ $(LDFLAGS)
+
+simple: $(BUILD_DIR)/tests/simple.o $(OBJS)
+	$(CC) $^ -o $(BUILD_DIR)/$@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BUILD_DIR): 
+$(BUILD_DIR):
 	-$(MKDIR) $(PATHS)
-
-$(TARGET): $(OBJS)
-	$(CC) $^ -o $@ $(LDFLAGS)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	-$(DEL) $(BUILD_DIR)

@@ -1,8 +1,6 @@
 {
-    "files.associations": {
-        "hal.h": "c",
-        "ods.h": "c",
-        "stdio.h": "c",
-        "stdlib.h": "c"
+    "[makefile]": {
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false
     }
 }

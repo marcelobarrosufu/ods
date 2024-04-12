@@ -18,11 +18,6 @@ void hal_cpu_sleep_ms(uint32_t tmr_ms)
     drv->sleep_ms(tmr_ms);
 }
 
-void hal_cpu_reset(void)
-{
-    drv->reset();
-}
-
 void hal_cpu_init(void)
 {
     drv->init();

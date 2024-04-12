@@ -57,18 +57,3 @@ void hal_rtc_init(void)
 
     hal_rtc_basetime = mktime(&base_time);
 }
-
-void hal_rtc_nvram_write(uint32_t index, uint32_t val)
-{
-    drv->nvram_write(index, val);
-}
-
-uint32_t hal_rtc_nvram_read(uint32_t index)
-{
-    return drv->nvram_read(index);
-}
-
-void hal_rtc_nvram_format(void)
-{
-	drv->nvram_format();
-}
