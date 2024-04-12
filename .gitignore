@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Other
+.VSCodeCounter/*
+*/__pycache__/
+build/*
+.DS_Store

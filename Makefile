@@ -1,0 +1,77 @@
+OSNAME=""
+ifeq ($(OS),Windows_NT)
+# add mingw gcc to path (e.g. set PATH=%PATH%;D:/mingw64/bin/)
+  OSNAME=Windows_NT
+  DEL=rmdir /s /q
+  MKDIR=md
+  BOARD=win
+  LDFLAGS_EXTRA = -Wl,--gc-sections
+  THIRD_INCS=
+  THIRD_LIBS=
+else 
+  OSNAME = $(shell uname -s)
+  ifeq ($(OSNAME),Linux)
+    DEL=rm -fR
+    MKDIR=mkdir -p
+    BOARD=linux
+    LDFLAGS_EXTRA = -Wl,--gc-sections
+    THIRD_INCS=-I/usr/include/ -L/usr/lib/x86_64-linux-gnu
+    THIRD_LIBS=-lpthread 
+  endif
+endif
+
+$(info OS is $(OSNAME))
+
+ifeq ($(OSNAME),"")
+  $(info "O.S. not supported")
+  $(shell exit)
+endif
+
+CC = gcc
+BUILD_DIR = build
+TARGET = $(BUILD_DIR)/ods.exe
+MAKEFLAGS += --jobs=8
+
+#-Wextra -Werror
+CFLAGS = -g -Wall -std=c11 -I. -I./inc -Iutl/inc -Ihal/inc -Iutl/printf -Iutl/ods $(THIRD_INCS)
+LDFLAGS = $(LDFLAGS_EXTRA) -lm  $(THIRD_LIBS)
+
+APP_SRCS = src/main.c
+HAL_SRCS = hal/src/hal.c hal/src/hal_rtc.c hal/src/hal_tmr.c hal/src/hal_cpu.c 
+PORT_SRCS = port/$(BOARD)/rtc.c port/$(BOARD)/stdout.c port/$(BOARD)/timer.c port/$(BOARD)/cpu.c
+UTL_SRCS = utl/src/utl_dbg.c utl/printf/utl_printf.c  utl/ods/ods.c
+THIRD_SRCS = 
+
+SRCS = $(APP_SRCS) $(HAL_SRCS) $(UTL_SRCS) $(PORT_SRCS) $(THIRD_SRCS)
+
+OBJS = $(addprefix $(BUILD_DIR)/,$(SRCS:.c=.o))
+#vpath %.c $(sort $(dir $(SRCS)))
+PATHS = $(dir $(OBJS))
+
+
+ifeq ($(OSNAME),Windows_NT)
+  OBJS2DEL = $(subst /,\,$(OBJS))
+  PATHS:= $(subst /,\,$(PATHS))
+else
+  OBJS2DEL = $(OBJS)
+endif
+
+.PHONY: all clean
+
+all: $(BUILD_DIR) $(TARGET)
+
+$(BUILD_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR): 
+	-$(MKDIR) $(PATHS)
+
+$(TARGET): $(OBJS)
+	$(CC) $^ -o $@ $(LDFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	-$(DEL) $(BUILD_DIR)
+
