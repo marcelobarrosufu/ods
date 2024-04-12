@@ -26,7 +26,10 @@ Running tasks can also add other tasks to the current scheduler. However, this s
 
 ### Very simple scheduler with two tasks
 
-<%@include file="./tests/simple.c"%>
+[Source code](
+https://github.com/marcelobarrosufu/ods//tests/main.c)
+
+
 
 ## Portability layer
 
