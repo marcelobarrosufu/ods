@@ -24,10 +24,10 @@ Running tasks can also add other tasks to the current scheduler. However, this s
 
 ## Use cases
 
-### Very simple scheduler with two tasks
+Please see the available examples:
 
-[Source code](
-https://github.com/marcelobarrosufu/ods/blob/main/tests/main.c)
+* [Simple schedular with two tasks](
+https://github.com/marcelobarrosufu/ods/blob/main/examples/simple.c)
 
 
 
