@@ -188,6 +188,7 @@ void ods_init(ods_ctx_t *ctx)
     ctx->ods_exec_list = NULL;
     ctx->ods_pre_exec_list = NULL;
     ctx->ods_num_tasks = 0;
+    ctx->ods_timer = NULL;
     ctx->ods_tmr_args.cbk = ods_process;
     ctx->ods_tmr_args.arg = (void *) ctx;
 }
@@ -225,7 +226,11 @@ void ods_start(ods_ctx_t *ctx, uint32_t tick_time_ms)
 
 void ods_stop(ods_ctx_t *ctx)
 {
-    hal_tmr_delete(ctx->ods_timer);
+    if(ctx->ods_timer)
+    {
+        hal_tmr_delete(ctx->ods_timer);
+        ctx->ods_timer = NULL;
+    }
 }
 
 uint32_t ods_task_runtime_get_ms(ods_task_ctx_t *task_ctx)
