@@ -17,20 +17,23 @@ int main(int argc, char *argv[])
 
     // create context for scheduler
     ods_ctx_t sch_ctx;
+
     // create context for tasks (no arguments provided, in this case)
     ods_task_ctx_t tsk1_ctx = { .func = tsk_a_exec, .arg = NULL };
-    ods_task_ctx_t tsk2_ctk = { .func = tsk_b_exec, .arg = NULL };
+    ods_task_ctx_t tsk2_ctx = { .func = tsk_b_exec, .arg = NULL };
 
     // initialize scheduler
-    ods_init(&sch_ctx);    
+    ods_init(&sch_ctx);  
+
     // add tasks to scheduler    
     ods_task_add(&sch_ctx,&tsk1_ctx);
-    ods_task_add(&sch_ctx,&tsk2_ctk);
+    ods_task_add(&sch_ctx,&tsk2_ctx);
     UTL_DBG_PRINTFSL(UTL_DBG_LEVEL_APP,"Starting scheduler...\n");
-    // start scheduler with 50ms tick time
+
+    // start scheduler with 100ms tick time
     ods_start(&sch_ctx,100);
 
-    // wait schedular execution for 5 seconds
+    // wait schedular execution for 1 second
     hal_cpu_sleep_ms(1000);
 
     // stop scheduler

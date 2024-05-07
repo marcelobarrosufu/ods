@@ -24,11 +24,14 @@ Running tasks can also add other tasks to the current scheduler. However, this s
 
 ## Use cases
 
-Please see the available examples:
+Please see the following examples:
 
-* [Simple schedular with two tasks](
-https://github.com/marcelobarrosufu/ods/blob/main/examples/simple.c)
-
+* [Single scheduler with two tasks](
+https://github.com/marcelobarrosufu/ods/blob/main/examples/sch1tsk2.c)
+* [Two schedulers with one task each one](
+https://github.com/marcelobarrosufu/ods/blob/main/examples/sch2tsk1.c)
+* [How to use task sleep function and pass argument to tasks](
+https://github.com/marcelobarrosufu/ods/blob/main/examples/sleep.c)
 
 
 ## Portability layer
@@ -43,7 +46,7 @@ In the hal/inc directory the necessary modules are listed:
 
 * **hal_tmr.h**: this service is essential and should allow cyclic timers to be created and deleted.
 
-As a reference, implementations were provided for Windows, Linux and STM32F411 (Black Pill) within the **port/[platform]** directory.
+As a reference, implementations were provided for Windows, Linux and STM32F411 (Black Pill, available soon) within the **port/[platform]** directory.
 
 
 

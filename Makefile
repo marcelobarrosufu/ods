@@ -38,7 +38,7 @@ LDFLAGS = $(LDFLAGS_EXTRA) -lm  $(THIRD_LIBS)
 HAL_SRCS = hal/src/hal.c hal/src/hal_rtc.c hal/src/hal_tmr.c hal/src/hal_cpu.c 
 PORT_SRCS = port/$(BOARD)/rtc.c port/$(BOARD)/stdout.c port/$(BOARD)/timer.c port/$(BOARD)/cpu.c
 UTL_SRCS = utl/src/utl_dbg.c utl/printf/utl_printf.c  utl/ods/ods.c
-EXAMPLE_SRCS = examples/main.c examples/simple.c
+EXAMPLE_SRCS = examples/main.c examples/sch1tsk2.c examples/sch2tsk1.c examples/sleep.c
 THIRD_SRCS = 
 
 SRCS = $(HAL_SRCS) $(UTL_SRCS) $(PORT_SRCS) $(THIRD_SRCS)
@@ -48,7 +48,7 @@ EXAMPLE_OBJS = $(addprefix $(BUILD_DIR)/,$(EXAMPLE_SRCS:.c=.o))
 
 PATHS = $(dir $(OBJS) $(EXAMPLE_OBJS))
 
-TARGETS = main simple
+TARGETS = main sch1tsk2 sch2tsk1 sleep
 
 ifeq ($(OSNAME),Windows_NT)
   PATHS:= $(subst /,\,$(PATHS))
@@ -61,7 +61,13 @@ all: $(BUILD_DIR) $(TARGETS)
 main: $(BUILD_DIR)/examples/main.o $(OBJS)
 	$(CC) $^ -o $(BUILD_DIR)/$@ $(LDFLAGS)
 
-simple: $(BUILD_DIR)/examples/simple.o $(OBJS)
+sch1tsk2: $(BUILD_DIR)/examples/sch1tsk2.o $(OBJS)
+	$(CC) $^ -o $(BUILD_DIR)/$@ $(LDFLAGS)
+
+sch2tsk1: $(BUILD_DIR)/examples/sch2tsk1.o $(OBJS)
+	$(CC) $^ -o $(BUILD_DIR)/$@ $(LDFLAGS)
+
+sleep: $(BUILD_DIR)/examples/sleep.o $(OBJS)
 	$(CC) $^ -o $(BUILD_DIR)/$@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: %.c
